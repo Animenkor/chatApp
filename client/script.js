@@ -23,6 +23,7 @@ function updateUsername() {
 
 // Display a received message
 function displayMessage(sender, message) {
+    //TODO: Let own messages show to the left and others to the right
     const messageElement = document.createElement("div");
     messageElement.classList.add("msg");
 
