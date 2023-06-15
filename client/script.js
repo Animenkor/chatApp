@@ -9,6 +9,8 @@ const ws = new WebSocket("ws://localhost:3000");
 // Send a message to the server
 function sendMessage() {
     const message = messageInput.value;
+
+    if (message === "") return;
     ws.send(JSON.stringify(message));
     messageInput.value = "";
 }
@@ -42,10 +44,21 @@ function displayMessage(sender, message) {
 function displayActiveUsers(usernames) {
     usersDiv.innerHTML = "";
 
+    const titleElement = document.createElement("p");
+    titleElement.classList.add("fwb", "curr-online");
+    titleElement.innerText = "Currently online:";
+    usersDiv.appendChild(titleElement);
+
     usernames.forEach((username) => {
         const userElement = document.createElement("p");
         userElement.classList.add("user");
-        userElement.innerText = username;
+
+        const iconElement = document.createElement("i");
+        iconElement.classList.add("fa-solid", "fa-circle", "icon-online");
+        userElement.appendChild(iconElement);
+
+        const usernameText = document.createTextNode(username);
+        userElement.appendChild(usernameText);
 
         usersDiv.appendChild(userElement);
     });

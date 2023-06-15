@@ -5,13 +5,41 @@ const redisClient = redis.createClient();
 
 let activeUsers = [];
 
+function generateRandomNumber() {
+    const min = 1000000;
+    const max = 9999999;
+
+    // Generate a random number within the specified range
+    let randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+
+    return randomNumber;
+}
+
 // Generate a random username
 function generateRandomUsername() {
-    const adjectives = ["Happy", "Sad", "Funny", "Serious", "Crazy", "Clever", "Brave"];
-    const nouns = ["Cat", "Dog", "Elephant", "Lion", "Tiger", "Bear", "Monkey"];
-    const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
-    const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
-    return `${randomAdjective}-${randomNoun}`;
+    const chars = [
+        "Frodo",
+        "Gandalf",
+        "Aragorn",
+        "Legolas",
+        "Gimli",
+        "Samwise",
+        "Merry",
+        "Pippin",
+        "Boromir",
+        "Galadriel",
+        "Elrond",
+        "Gollum",
+        "Saruman",
+        "Sauron",
+        "Eowyn",
+        "Treebeard",
+        "Theoden",
+    ];
+    const char = chars[Math.floor(Math.random() * chars.length)];
+
+    const num = generateRandomNumber();
+    return `${char}-${num}`;
 }
 
 // Create WebSocket server
