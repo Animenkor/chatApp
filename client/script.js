@@ -1,59 +1,53 @@
-const socket = new WebSocket("ws://localhost:3000");
+const usernameInput = document.getElementById("username");
+const messageInput = document.getElementById("message");
+const sendButton = document.getElementById("send-btn");
+const messagesDiv = document.getElementById("messages");
 
-socket.addEventListener("open", (event) => {
-    console.log("WebSocket connected!");
+const ws = new WebSocket("ws://localhost:3000");
 
-    // Generate a username on the first connection
-    const username = generateUsername();
-    document.getElementById("username").value = username;
-    socket.send(username);
-});
-
-socket.addEventListener("message", (event) => {
-    const messageObj = JSON.parse(event.data);
-    const messageContainer = document.getElementById("message-container");
-    const newMessage = document.createElement("div");
-    newMessage.innerText = messageObj;
-    messageContainer.appendChild(newMessage);
-});
-
-socket.addEventListener("close", (event) => {
-    console.log("WebSocket closed.");
-});
-
-socket.addEventListener("error", (event) => {
-    console.error("WebSocket error:", event);
-});
-
+// Send a message to the server
 function sendMessage() {
-    const messageInput = document.getElementById("message-input");
-    const usernameInput = document.getElementById("username");
-
     const message = messageInput.value;
-    const username = usernameInput.value;
+    ws.send(JSON.stringify(message));
+    messageInput.value = "";
+}
 
-    if (message && username) {
-        const msg = {
-            type: "message",
-            message: {
-                username,
-                message,
-            },
-            sentAt: new Date().toLocaleTimeString(),
-        };
-        socket.send(JSON.stringify(msg));
+// Display a received message
+function displayMessage(sender, message) {
+    console.log(message);
+    const messageElement = document.createElement("div");
+    messageElement.classList.add("msg");
 
-        messageInput.value = "";
+    const username = document.createElement("p");
+    username.classList.add("sender");
+    username.innerText = sender;
+
+    const msg = document.createElement("p");
+    msg.classList.add("msg-content");
+    msg.innerText = message;
+
+    messageElement.appendChild(username);
+    messageElement.appendChild(msg);
+
+    const messagesDiv = document.getElementById("messages");
+    messagesDiv.appendChild(messageElement);
+}
+
+ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+
+    if (data.type === "username") {
+        usernameInput.value = data.username;
+    } else {
+        const { sender, message } = data;
+        displayMessage(sender, message);
     }
-}
+};
 
-function generateUsername() {
-    const adjectives = ["Happy", "Sad", "Excited", "Brave", "Clever", "Gentle", "Honest", "Kind", "Polite", "Silly"];
+sendButton.addEventListener("click", sendMessage);
 
-    const nouns = ["Cat", "Dog", "Elephant", "Lion", "Tiger", "Monkey", "Penguin", "Dolphin", "Butterfly", "Owl"];
-
-    const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
-    const noun = nouns[Math.floor(Math.random() * nouns.length)];
-
-    return adjective + noun;
-}
+messageInput.addEventListener("keyup", (event) => {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+});

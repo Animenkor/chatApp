@@ -6,16 +6,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>My Chat Program</title>
         <link rel="stylesheet" href="/style.css" />
-        <script src="/script.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Caveat&family=Poppins:wght@300&display=swap"
+            rel="stylesheet"
+        />
     </head>
     <body>
-        <div class="container">
-            <div id="message-container"></div>
+        <div id="chat-container" class="chat-container">
+            <div class="message-users-container">
+                <div id="messages" class="messages"></div>
+                <div id="users" class="users">
+                    <p class="tac">Users</p>
+                </div>
+            </div>
             <div class="input-container">
-                <input type="text" id="message-input" placeholder="Enter your message" />
-                <input type="text" id="username" placeholder="Enter your username" />
-                <button onclick="sendMessage()">Send</button>
+                <input type="text" id="username" placeholder="Enter username" />
+                <input type="text" id="message" placeholder="Enter message" />
+                <button id="send-btn">Send</button>
             </div>
         </div>
     </body>
+    <script src="/script.js"></script>
 </html>

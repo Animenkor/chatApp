@@ -1,66 +1,67 @@
 const WebSocket = require("ws");
 const redis = require("redis");
 
-let publisher;
-const clients = [];
+const redisClient = redis.createClient();
 
-// Initialize the websocket server
-const initializeWebsocketServer = async (server) => {
-    const client = redis.createClient({
-        socket: {
-            host: process.env.REDIS_HOST || "localhost",
-            port: process.env.REDIS_PORT || "6379",
-        },
+let activeUsers = [];
+
+// Generate a random username
+function generateRandomUsername() {
+    const adjectives = ["Happy", "Sad", "Funny", "Serious", "Crazy", "Clever", "Brave"];
+    const nouns = ["Cat", "Dog", "Elephant", "Lion", "Tiger", "Bear", "Monkey"];
+    const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+    const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
+    return `${randomAdjective}-${randomNoun}`;
+}
+
+// Create WebSocket server
+function initializeWebsocketServer(server) {
+    const wss = new WebSocket.Server({ server });
+
+    // Handle WebSocket connections
+    wss.on("connection", (ws) => {
+        // Generate a random username for the new user
+        const username = generateRandomUsername();
+
+        // Save the WebSocket connection in the active users array
+        activeUsers.push(ws);
+
+        // Send the generated username to the new user
+        ws.send(JSON.stringify({ type: "username", username }));
+
+        // Broadcast a user joined message
+        broadcastMessage(username, "joined the chat");
+
+        // Handle incoming messages from the user
+        ws.on("message", (message) => {
+            // Parse the received message as JSON
+            const parsedMessage = JSON.parse(message);
+            console.log(activeUsers);
+
+            // Broadcast the parsed message to all active users
+            broadcastMessage(username, parsedMessage);
+        });
+
+        // Handle WebSocket disconnections
+        ws.on("close", () => {
+            // Remove the WebSocket connection from the active users array
+            activeUsers = activeUsers.filter((client) => client !== ws);
+
+            // Broadcast a user left message
+            broadcastMessage(username, "left the chat");
+        });
     });
+}
 
-    // This is the subscriber part
-    const subscriber = client.duplicate();
-    await subscriber.connect();
+// Broadcast a message to all active users
+function broadcastMessage(sender, message) {
+    const data = JSON.stringify({ sender, message });
 
-    // This is the publisher part
-    publisher = client.duplicate();
-    await publisher.connect();
-
-    const websocketServer = new WebSocket.Server({ server });
-
-    websocketServer.on("connection", (ws) => onConnection(ws, subscriber));
-    websocketServer.on("error", console.error);
-
-    await subscriber.subscribe("newMessage", onRedisMessage);
-    await publisher.publish("newMessage", "Hello from Redis!");
-};
-
-// If a new connection is established, the onConnection function is called
-const onConnection = (ws, subscriber) => {
-    //console.log("New websocket connection");
-
-    ws.on("close", () => onClose(ws));
-    ws.on("message", (message) => onClientMessage(ws, message, subscriber));
-
-    ws.send("Hello Client!");
-};
-
-// If a new message is received, the onClientMessage function is called
-const onClientMessage = (ws, message, subscriber) => {
-    console.log("Message received: " + message);
-    publisher.publish("newMessage", message);
-};
-
-// If a new message from the redis channel is received, the onRedisMessage function is called
-const onRedisMessage = (channel, message) => {
-    //console.log("Message received from Redis: " + message);
-    clients.forEach((client) => {
-        client.send(message);
+    activeUsers.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(data);
+        }
     });
-};
-
-// If a connection is closed, the onClose function is called
-const onClose = (ws) => {
-    //console.log("Websocket connection closed");
-    const index = clients.indexOf(ws);
-    if (index !== -1) {
-        clients.splice(index, 1);
-    }
-};
+}
 
 module.exports = { initializeWebsocketServer };

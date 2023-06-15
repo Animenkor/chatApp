@@ -1,21 +1,94 @@
-.container {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 20px;
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu&display=swap");
+
+:root {
+    --bg: #404040;
+    --accent: #c5a701;
+    --dark-accent: #776500;
+    --btn: #4caf50;
+    --font: #b9b9b9;
+    font-family: "Ubuntu", sans-serif;
+}
+body {
+    background-color: var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.tac {
+    text-align: center;
+}
+.chat-container {
+    width: 50vw;
+    height: 80vh;
+    background-color: var(--accent);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+}
+
+.message-users-container {
+    display: flex;
+    flex-direction: row;
+    height: 70vh;
+}
+
+#messages {
+    flex: 75%;
+}
+
+#users {
+    flex: 25%;
+    background-color: #bbb;
+    border-radius: 10px;
 }
 
 .input-container {
     display: flex;
-    margin-top: 10px;
+    flex-direction: column;
 }
 
-.input-container input[type="text"] {
-    flex: 1;
+input,
+button {
+    margin-top: 5px;
+}
+#username,
+#message {
+    margin-bottom: 5px;
     padding: 10px;
+    border-radius: 10px;
+    background-color: var(--bg);
+    border: 1px solid #444444;
+    color: var(--font);
 }
 
-.input-container button {
-    padding: 10px 20px;
-    margin-left: 10px;
+#send-btn {
+    padding: 10px;
+    background-color: var(--btn);
+    color: var(--font);
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
 }
-/* TODO: ADD FRONTEND STYLING */
+
+#send-btn:hover {
+    filter: grayscale(0.2);
+    background-color: var(--btn);
+}
+
+.msg {
+    padding: 5px;
+    margin-bottom: 5px;
+    background-color: var(--dark-accent);
+    max-width: 200px;
+    width: fit-content;
+    word-break: break-word;
+    border-radius: 10px;
+    color: var(--font);
+}
+
+.msg .sender {
+    font-weight: bold;
+}
