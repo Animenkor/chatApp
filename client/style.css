@@ -1,10 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Ubuntu&display=swap");
 
+@font-face {
+    font-family: "RingbearerMedium-51mgZ";
+    src: local("RingbearerMedium-51mgZ"), url("./RingbearerMedium-51mgZ.ttf") format("woff");
+}
+
 :root {
     --bg: #404040;
-    --accent: #c5a701;
-    --dark-accent: #776500;
-    --btn: #4caf50;
+    --accent: #c57001;
+    --dark-accent: #a40606;
+    --green: #4caf50;
     --font: #b9b9b9;
     font-family: "Ubuntu", sans-serif;
 }
@@ -15,14 +20,36 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
+    flex-direction: column;
+}
+.app-title {
+    font-family: "RingbearerMedium-51mgZ", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-image: linear-gradient(to top, var(--dark-accent), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 3em;
+}
+.app-title img {
+    height: 50px;
+    width: auto;
+    margin-right: 10px;
 }
 .tac {
     text-align: center;
 }
+.fwb {
+    font-weight: bold;
+}
 .chat-container {
+    background-color: var(--dark-accent);
+    background-image: linear-gradient(360deg, var(--dark-accent) 0%, var(--accent) 74%);
     width: 50vw;
     height: 80vh;
-    background-color: var(--accent);
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -32,24 +59,33 @@ body {
 .message-users-container {
     display: flex;
     flex-direction: row;
-    height: 70vh;
+    height: calc(70vh - 60px);
 }
 
-#messages {
+.messages {
     flex: 75%;
+    overflow-y: auto;
 }
 
-#users {
+.users {
     flex: 25%;
-    background-color: #bbb;
-    border-radius: 10px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.21);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
 }
 
 .input-container {
     display: flex;
     flex-direction: column;
+    height: 60px;
 }
-
+.icon-online {
+    color: var(--green);
+    padding: 5px;
+}
 input,
 button {
     margin-top: 5px;
@@ -66,7 +102,7 @@ button {
 
 #send-btn {
     padding: 10px;
-    background-color: var(--btn);
+    background-color: var(--accent);
     color: var(--font);
     border: none;
     cursor: pointer;
@@ -75,11 +111,11 @@ button {
 
 #send-btn:hover {
     filter: grayscale(0.2);
-    background-color: var(--btn);
+    background-color: var(--accent);
 }
 
 .msg {
-    padding: 5px;
+    padding: 5px 15px;
     margin-bottom: 5px;
     background-color: var(--dark-accent);
     max-width: 200px;
