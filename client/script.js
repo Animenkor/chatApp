@@ -2,6 +2,7 @@ const usernameInput = document.getElementById("username");
 const messageInput = document.getElementById("message");
 const sendButton = document.getElementById("send-btn");
 const messagesDiv = document.getElementById("messages");
+const usersDiv = document.getElementById("users");
 
 const ws = new WebSocket("ws://localhost:3000");
 
@@ -14,7 +15,6 @@ function sendMessage() {
 
 // Display a received message
 function displayMessage(sender, message) {
-    console.log(message);
     const messageElement = document.createElement("div");
     messageElement.classList.add("msg");
 
@@ -29,15 +29,33 @@ function displayMessage(sender, message) {
     messageElement.appendChild(username);
     messageElement.appendChild(msg);
 
-    const messagesDiv = document.getElementById("messages");
     messagesDiv.appendChild(messageElement);
 }
+
+// Display active users
+function displayActiveUsers(usernames) {
+    usersDiv.innerHTML = "";
+
+    usernames.forEach((username) => {
+        const userElement = document.createElement("p");
+        userElement.classList.add("user");
+        userElement.innerText = username;
+
+        usersDiv.appendChild(userElement);
+    });
+}
+
+ws.onopen = () => {
+    console.log("WebSocket connection established.");
+};
 
 ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
 
     if (data.type === "username") {
         usernameInput.value = data.username;
+    } else if (data.type === "activeUsers") {
+        displayActiveUsers(data.usernames);
     } else {
         const { sender, message } = data;
         displayMessage(sender, message);
