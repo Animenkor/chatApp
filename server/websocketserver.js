@@ -23,59 +23,63 @@ function initializeWebsocketServer(server) {
         // Generate a random username for the new user
         const username = generateRandomUsername();
 
-        // Save the WebSocket connection in the active users array
-        activeUsers.push({ ws, username });
+        // Save the WebSocket connection and username in the active users array
+        const user = { ws, username };
+        activeUsers.push(user);
 
         // Send the generated username to the new user
         ws.send(JSON.stringify({ type: "username", username }));
 
         // Broadcast a user joined message
         broadcastMessage(username, "joined the chat");
-
-        // Display active users
-        displayActiveUsers();
+        broadcastActiveUsernames();
 
         // Handle incoming messages from the user
         ws.on("message", (message) => {
             // Parse the received message as JSON
             const parsedMessage = JSON.parse(message);
 
-            // Broadcast the parsed message to all active users
-            broadcastMessage(username, parsedMessage);
+            if (parsedMessage.type === "updateUsername") {
+                // Update the username for the user
+                user.username = parsedMessage.username;
+                broadcastActiveUsernames();
+            } else {
+                // Broadcast the parsed message to all active users
+                broadcastMessage(user.username, parsedMessage);
+            }
         });
 
         // Handle WebSocket disconnections
         ws.on("close", () => {
-            // Remove the WebSocket connection from the active users array
-            activeUsers = activeUsers.filter((user) => user.ws !== ws);
+            // Remove the user from the active users array
+            activeUsers = activeUsers.filter((u) => u !== user);
 
             // Broadcast a user left message
-            broadcastMessage(username, "left the chat");
-
-            // Display active users
-            displayActiveUsers();
+            broadcastMessage(user.username, "left the chat");
+            broadcastActiveUsernames();
         });
     });
 }
 
-// Broadcast a message to all active users
 // Broadcast a message to all active users
 function broadcastMessage(sender, message) {
     const data = JSON.stringify({ sender, message });
 
     activeUsers.forEach((user) => {
-        user.ws.send(data);
+        if (user.ws.readyState === WebSocket.OPEN) {
+            user.ws.send(data);
+        }
     });
 }
 
-// Display usernames of all active users
-function displayActiveUsers() {
+// Broadcast active usernames to all users
+function broadcastActiveUsernames() {
     const usernames = activeUsers.map((user) => user.username);
-    const message = JSON.stringify({ type: "activeUsers", usernames });
+    const data = JSON.stringify({ type: "activeUsers", usernames });
 
     activeUsers.forEach((user) => {
         if (user.ws.readyState === WebSocket.OPEN) {
-            user.ws.send(message);
+            user.ws.send(data);
         }
     });
 }

@@ -13,6 +13,12 @@ function sendMessage() {
     messageInput.value = "";
 }
 
+// Update the username
+function updateUsername() {
+    const newUsername = usernameInput.value;
+    ws.send(JSON.stringify({ type: "updateUsername", username: newUsername }));
+}
+
 // Display a received message
 function displayMessage(sender, message) {
     const messageElement = document.createElement("div");
@@ -63,6 +69,8 @@ ws.onmessage = (event) => {
 };
 
 sendButton.addEventListener("click", sendMessage);
+
+usernameInput.addEventListener("change", updateUsername);
 
 messageInput.addEventListener("keyup", (event) => {
     if (event.key === "Enter") {
