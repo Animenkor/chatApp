@@ -1,3 +1,21 @@
-body {
-    font-family: 'Roboto', sans-serif;
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
 }
+
+.input-container {
+    display: flex;
+    margin-top: 10px;
+}
+
+.input-container input[type="text"] {
+    flex: 1;
+    padding: 10px;
+}
+
+.input-container button {
+    padding: 10px 20px;
+    margin-left: 10px;
+}
+/* TODO: ADD FRONTEND STYLING */

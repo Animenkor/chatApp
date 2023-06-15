@@ -10,11 +10,15 @@
     </head>
     <body>
         <div class="container">
-            <div id="message-container"></div>
-            <div class="input-container">
-                <input type="text" id="message-input" placeholder="Enter your message" />
-                <input type="text" id="username" placeholder="Enter your username" />
-                <button onclick="sendMessage()">Send</button>
+            <div class="chatbox">
+                <div class="client-message">
+                    <p class="user-name">Username:</p>
+                    <p class="user-msg">Message</p>
+                </div>
+            </div>
+            <div class="message-input">
+                <input type="text" name="clientMessage" id="messageInput" placeholder="type your message here..." />
+                <input type="button" class="btn-submit" value="Send" />
             </div>
         </div>
     </body>
