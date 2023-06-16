@@ -65,8 +65,16 @@ body {
 .messages {
     flex: 75%;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+.msg-left {
+    align-self: flex-start;
 }
 
+.msg-right {
+    align-self: flex-end;
+}
 .users {
     flex: 25%;
     padding: 10px;

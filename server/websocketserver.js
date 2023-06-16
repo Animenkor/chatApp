@@ -10,8 +10,8 @@ let activeUsers = [];
 //TODO: Deploy on Kubernetes
 
 function generateRandomNumber() {
-    const min = 1000000;
-    const max = 9999999;
+    const min = 1000;
+    const max = 9999;
 
     // Generate a random number within the specified range
     let randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
