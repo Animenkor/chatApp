@@ -5,10 +5,6 @@ const redisClient = redis.createClient();
 
 let activeUsers = [];
 
-//TODO: Make Docker Image
-//TODO: Publish to Dockerhub
-//TODO: Deploy on Kubernetes
-
 function generateRandomNumber() {
     const min = 1000;
     const max = 9999;
