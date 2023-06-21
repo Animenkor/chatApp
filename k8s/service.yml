@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
     name: chat-service
-    namespace: { { teko4 } } # Replace with your namespace
+    namespace: teko4
 spec:
     selector:
         app: chat
