@@ -4,7 +4,18 @@ const sendButton = document.getElementById("send-btn");
 const messagesDiv = document.getElementById("messages");
 const usersDiv = document.getElementById("users");
 
-const ws = new WebSocket("ws://localhost:3000");
+function getUrl() {
+    const userUrl = window.location.hostname;
+
+    // PROD
+    if (userUrl.startsWith("engweiler")) {
+        return "http://engweiler.teko.hackerman.ch";
+    }
+    // DEV
+    return "ws://localhost:3000";
+}
+
+const ws = new WebSocket(getUrl());
 
 // Send a message to the server
 function sendMessage() {
