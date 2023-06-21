@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-    name: chat-service
-    namespace: teko4
+  name: chat-service
+  namespace: teko4
 spec:
-    selector:
-        app: chat
-    ports:
-        - name: http
-          protocol: TCP
-          port: 3000
-          targetPort: 3000
+  selector:
+    app: chat
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

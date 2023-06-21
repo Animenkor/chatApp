@@ -8,10 +8,10 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Install the dependencies
-RUN npm install
+RUN yarn install
 
 # Copy the source code to the container
 COPY . .
 
 # Start the server when the container starts
-CMD [npm, RUN]
+CMD ["yarn", "dev"]
