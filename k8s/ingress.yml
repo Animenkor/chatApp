@@ -14,7 +14,7 @@ spec:
     tls:
         - hosts:
               - engweiler.teko.hackerman.ch
-          secretName: engweiler.teko.hackerman.ch -tls
+          secretName: engweiler.teko.hackerman.ch-tls
     rules:
         - host: engweiler.teko.hackerman.ch
           http:
